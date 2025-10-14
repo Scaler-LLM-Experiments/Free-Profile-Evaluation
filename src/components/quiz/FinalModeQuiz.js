@@ -4,7 +4,6 @@ import { useProfile } from '../../context/ProfileContext';
 import styled, { keyframes } from 'styled-components';
 import BackgroundSelectionSplit2 from './BackgroundSelectionSplit2';
 import GroupedQuestionScreen from './GroupedQuestionScreen';
-import GoalsQuestionScreen from './GoalsQuestionScreen';
 import { TECH_QUIZ_SCREENS, NON_TECH_QUIZ_SCREENS, isScreenComplete } from './ChattyQuizScreens';
 import { ReactComponent as ScalerLogo } from '../../assets/scaler-logo.svg';
 import { CaretLeft, CaretRight, Check, ChartLine, Target, ChatCircleDots, Books, UsersThree } from 'phosphor-react';
@@ -218,8 +217,7 @@ const ChatMessage = styled.div`
     content: '';
     position: absolute;
     left: -14px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 20px;
     width: 0;
     height: 0;
     border-top: 12px solid transparent;
@@ -231,8 +229,7 @@ const ChatMessage = styled.div`
     content: '';
     position: absolute;
     left: -10px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 20px;
     width: 0;
     height: 0;
     border-top: 10px solid transparent;
@@ -308,10 +305,25 @@ const NextButton = styled.button`
   }
 `;
 
+const TopNavigationWrapper = styled.div`
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 16px 0;
+  z-index: 10;
+  margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
 const DesktopNavigation = styled.div`
-  position: absolute;
-  top: 32px;
-  left: 32px;
   display: flex;
   gap: 12px;
 `;
@@ -319,9 +331,6 @@ const DesktopNavigation = styled.div`
 const CarouselDotsContainer = styled.div`
   display: flex;
   gap: 8px;
-  position: absolute;
-  top: 32px;
-  right: 32px;
   align-items: center;
   height: 40px;
 `;
@@ -377,8 +386,8 @@ const MobileChatBubble = styled.div`
   border-radius: 0;
   padding: 16px;
   position: relative;
-  align-self: flex-start;
-  max-width: 85%;
+  align-self: stretch;
+  width: 100%;
 
   &::before {
     content: '';
@@ -630,23 +639,17 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     if (screenIndex >= 0 && screenIndex < quizScreens.length) {
       const screen = quizScreens[screenIndex];
 
-      // Special handling for goals screen
-      if (screen.isGoalsScreen) {
-        const isTech = background === 'tech';
-        const isNonTech = background === 'non-tech';
-
-        if (isTech) {
-          return Boolean(goals?.targetCompany && goals.targetCompany.trim());
-        }
-        if (isNonTech) {
-          return goals?.topicOfInterest?.length > 0;
-        }
-        return false;
-      }
-
       // Check if all questions on current screen are answered
       const allQuestionsAnswered = screen.questions.every(
-        (q) => quizResponses[q.id] !== undefined && quizResponses[q.id] !== null
+        (q) => {
+          // Skip conditional questions if their condition is not met
+          if (q.conditional && q.showIf) {
+            if (!q.showIf(quizResponses)) {
+              return true; // Consider it "answered" if it doesn't need to be shown
+            }
+          }
+          return quizResponses[q.id] !== undefined && quizResponses[q.id] !== null;
+        }
       );
 
       return allQuestionsAnswered;
@@ -673,15 +676,28 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     if (screenIndex >= 0 && screenIndex < quizScreens.length) {
       const screen = quizScreens[screenIndex];
 
-      // Special handling for goals screen
-      if (screen.isGoalsScreen) {
-        return (
-          <GoalsQuestionScreen
-            hideChat={true}
-            onAutoAdvance={handleNext}
-          />
-        );
-      }
+      // Process questions to handle dynamic options and conditional logic
+      const processedQuestions = screen.questions
+        .filter(question => {
+          // Filter out conditional questions if their condition is not met
+          if (question.conditional && question.showIf) {
+            return question.showIf(quizResponses);
+          }
+          return true;
+        })
+        .map(question => {
+          if (question.dynamicOptions && question.optionsByRole) {
+            // Get the currentRole from responses
+            const currentRole = quizResponses.currentRole;
+            // Get options for the selected role, or use default options
+            const options = question.optionsByRole[currentRole] || question.optionsByRole['swe-product'] || [];
+            return {
+              ...question,
+              options
+            };
+          }
+          return question;
+        });
 
       // Calculate question start index based on previous screens
       let questionStartIndex = 2; // Start from 2 (after background question)
@@ -691,7 +707,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
 
       return (
         <GroupedQuestionScreen
-          questions={screen.questions}
+          questions={processedQuestions}
           responses={quizResponses}
           onResponse={handleQuizResponse}
           initialChatText={screen.initialChatText}
@@ -867,7 +883,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
 
       <RightPanel>
         {!isMobile && (
-          <>
+          <TopNavigationWrapper>
             <DesktopNavigation>
               <BackButton onClick={handlePrevious} disabled={currentStep === 0}>
                 <CaretLeft size={20} weight="regular" />
@@ -886,7 +902,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
                 />
               ))}
             </CarouselDotsContainer>
-          </>
+          </TopNavigationWrapper>
         )}
 
         {/* Mobile chatbot section - shown above questions */}

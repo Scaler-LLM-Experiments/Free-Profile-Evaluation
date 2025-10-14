@@ -2,12 +2,6 @@ import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProfile } from '../context/ProfileContext';
 import styled, { keyframes } from 'styled-components';
-import BackgroundSelection from './quiz/BackgroundSelection';
-import NonTechQuiz, { NON_TECH_SCREENS } from './quiz/NonTechQuiz';
-import TechQuiz, { TECH_SCREENS } from './quiz/TechQuiz';
-import SplitViewQuiz from './quiz/SplitViewQuiz';
-import SplitViewQuiz2 from './quiz/SplitViewQuiz2';
-import ChattyQuiz from './quiz/ChattyQuiz';
 import FinalModeQuiz from './quiz/FinalModeQuiz';
 import { CaretLeft } from 'phosphor-react';
 
@@ -104,9 +98,25 @@ const NextButton = styled.button`
   }
 `;
 
-const MAX_QUIZ_SCREENS = Math.max(NON_TECH_SCREENS.length, TECH_SCREENS.length);
+const ValidationWarning = styled.div`
+  background: ${props => props.severity === 'warning' ? '#FEF3C7' : '#DBEAFE'};
+  border-left: 4px solid ${props => props.severity === 'warning' ? '#F59E0B' : '#3B82F6'};
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #1e293b;
+  line-height: 1.6;
+  animation: ${fadeIn} 0.5s ease;
 
-function QuizPage({ onProgressChange, quizMode = 'grouped' }) {
+  strong {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+  }
+`;
+
+function QuizPage({ onProgressChange, quizMode = 'final' }) {
   const navigate = useNavigate();
   const {
     background,
@@ -124,221 +134,8 @@ function QuizPage({ onProgressChange, quizMode = 'grouped' }) {
     }
   }, [evaluationResults, navigate]);
 
-  // Render split view mode
-  if (quizMode === 'split') {
-    return <SplitViewQuiz />;
-  }
-
-  // Render split view 2 mode
-  if (quizMode === 'split-view2') {
-    return <SplitViewQuiz2 />;
-  }
-
-  // Render chatty single-question mode
-  if (quizMode === 'single') {
-    return <ChattyQuiz onProgressChange={onProgressChange} />;
-  }
-
-  // Render final mode
-  if (quizMode === 'final') {
-    return <FinalModeQuiz onProgressChange={onProgressChange} />;
-  }
-  const [currentStep, setCurrentStep] = useState(() => (background ? 1 : 0));
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    if (!background && currentStep !== 0) {
-      setCurrentStep(0);
-    }
-
-    if (background && currentStep === 0) {
-      setCurrentStep(1);
-    }
-  }, [background, currentStep]);
-
-  // Reset to step 1 when quiz mode changes
-  useEffect(() => {
-    if (background && currentStep > 0) {
-      setCurrentStep(1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [quizMode]);
-
-  const QUESTIONS_PER_SCREEN = quizMode === 'single' ? 1 : 3;
-
-  // Count total questions instead of screens
-  const questionCount = useMemo(() => {
-    if (!background) {
-      return 0;
-    }
-
-    const screens = background === 'non-tech' ? NON_TECH_SCREENS : TECH_SCREENS;
-    return screens.reduce((total, screen) => total + screen.questions.length, 0);
-  }, [background]);
-
-  // Calculate total screens based on questions grouped by 3
-  const totalScreens = useMemo(() => {
-    if (!background) return 1;
-    return Math.ceil(questionCount / QUESTIONS_PER_SCREEN);
-  }, [background, questionCount]);
-
-  const totalSteps = 1 + totalScreens; // background selection + question screens
-
-  const getProgress = () => {
-    // Progress starts at 0 for background selection
-    if (currentStep === 0) return 0;
-
-    const cappedStep = Math.min(currentStep, totalSteps - 1);
-    return (cappedStep / totalSteps) * 100;
-  };
-
-  // Update progress bar in parent
-  useEffect(() => {
-    if (onProgressChange) {
-      const progress = getProgress();
-      onProgressChange(progress);
-    }
-  }, [currentStep, totalSteps]);
-
-  const handleBackgroundSelect = (selectedBackground) => {
-    clearQuizResponses();
-    setBackground(selectedBackground);
-    setCurrentStep(1);
-  };
-
-  const handleQuizResponse = (question, answer) => {
-    setQuizResponse(question, answer);
-
-    // Auto-advance to next screen in single question mode
-    if (quizMode === 'single') {
-      setTimeout(() => {
-        handleNext();
-      }, 300);
-    }
-  };
-
-  const handleNext = () => {
-    if (!background) return;
-
-    // Scroll to top first
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    if (currentStep < totalScreens) {
-      setTimeout(() => {
-        setCurrentStep(currentStep + 1);
-      }, 100);
-      return;
-    }
-
-    // All quiz questions answered, navigate to goals
-    navigate('/goals');
-  };
-
-  const handlePrevious = () => {
-    if (currentStep === 0) {
-      navigate('/');
-      return;
-    }
-
-    if (currentStep === 1) {
-      clearQuizResponses();
-      setBackground(null);
-      setCurrentStep(0);
-      return;
-    }
-
-    setCurrentStep(currentStep - 1);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // Get current questions for the screen (3 questions per screen)
-  const getCurrentQuestions = () => {
-    if (!background || currentStep === 0) return [];
-
-    const screens = background === 'non-tech' ? NON_TECH_SCREENS : TECH_SCREENS;
-    const allQuestions = screens.flatMap(screen => screen.questions);
-
-    const startIndex = (currentStep - 1) * QUESTIONS_PER_SCREEN;
-    const endIndex = startIndex + QUESTIONS_PER_SCREEN;
-
-    return allQuestions.slice(startIndex, endIndex);
-  };
-
-  const canProceed = () => {
-    if (!background) return false;
-    if (currentStep === 0) return !!background;
-
-    const questions = getCurrentQuestions();
-    if (questions.length === 0) return true;
-
-    // Check if all required questions are answered
-    return questions.every(question => {
-      if (question.optional) return true;
-      return Boolean(quizResponses[question.id]);
-    });
-  };
-
-  const renderContent = () => {
-    if (!background) {
-      return <BackgroundSelection onSelect={handleBackgroundSelect} />;
-    }
-
-    const questions = getCurrentQuestions();
-    if (questions.length === 0) return null;
-
-    const screens = background === 'non-tech' ? NON_TECH_SCREENS : TECH_SCREENS;
-    const allQuestions = screens.flatMap(screen => screen.questions);
-
-    if (background === 'non-tech') {
-      return (
-        <NonTechQuiz
-          questions={questions}
-          onResponse={handleQuizResponse}
-          responses={quizResponses}
-          startIndex={(currentStep - 1) * QUESTIONS_PER_SCREEN}
-          totalQuestions={allQuestions.length}
-        />
-      );
-    }
-
-    return (
-      <TechQuiz
-        questions={questions}
-        onResponse={handleQuizResponse}
-        responses={quizResponses}
-        startIndex={(currentStep - 1) * QUESTIONS_PER_SCREEN}
-        totalQuestions={allQuestions.length}
-      />
-    );
-  };
-
-  return (
-    <QuizContainer ref={containerRef}>
-      <Container>
-        <QuizContent>
-          {renderContent()}
-        </QuizContent>
-      </Container>
-
-      <BottomNavigation>
-        <NavigationContent>
-          <PreviousButton
-            onClick={handlePrevious}
-            disabled={currentStep === 0}
-          >
-            Previous
-          </PreviousButton>
-          <NextButton
-            type="button"
-            onClick={handleNext}
-            disabled={!canProceed()}
-          >
-            Next
-          </NextButton>
-        </NavigationContent>
-      </BottomNavigation>
-    </QuizContainer>
-  );
+  // Always render final mode (other modes removed)
+  return <FinalModeQuiz onProgressChange={onProgressChange} />;
 }
 
 export default QuizPage;

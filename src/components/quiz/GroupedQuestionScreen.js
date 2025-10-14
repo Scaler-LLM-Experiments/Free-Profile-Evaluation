@@ -115,8 +115,7 @@ const ChatBubble = styled.div`
     content: '';
     position: absolute;
     left: -14px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 20px;
     width: 0;
     height: 0;
     border-top: 12px solid transparent;
@@ -128,8 +127,7 @@ const ChatBubble = styled.div`
     content: '';
     position: absolute;
     left: -10px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 20px;
     width: 0;
     height: 0;
     border-top: 10px solid transparent;
@@ -440,7 +438,7 @@ const GroupedQuestionScreen = ({
                     onClick={() => handleOptionSelect(question.id, option.value, questionIndex)}
                   >
                     <OptionIconWrapper selected={isSelected}>
-                      {getOptionIcon(option.value)}
+                      {option.icon || getOptionIcon(option.value)}
                     </OptionIconWrapper>
                     <OptionContent>
                       <OptionText>{option.label}</OptionText>
