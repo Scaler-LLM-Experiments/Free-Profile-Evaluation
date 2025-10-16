@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useProfile } from '../context/ProfileContext';
 import { evaluateProfile } from '../utils/evaluationLogic';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import { CheckCircle, Sparkle, BriefcaseMetal, ChartLine, MagnifyingGlass, Target } from 'phosphor-react';
+import { CheckCircle, Sparkle, BriefcaseMetal, ChartLine, MagnifyingGlass, Target, Phone } from 'phosphor-react';
 import ProfileMatchHeroV2 from './results/ProfileMatchHeroV2';
 
 const PrintStyles = createGlobalStyle`
@@ -184,6 +184,9 @@ const FloatingCTA = styled.button`
   white-space: nowrap;
   width: auto;
   max-width: 90%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
   &:hover {
     background: #a01855;
@@ -402,6 +405,7 @@ const ResultsPage = () => {
         />
       </Container>
       <FloatingCTA onClick={() => window.open('/callback', '_blank')}>
+        <Phone size={20} weight="bold" />
         Request Callback
       </FloatingCTA>
     </ResultsContainer>

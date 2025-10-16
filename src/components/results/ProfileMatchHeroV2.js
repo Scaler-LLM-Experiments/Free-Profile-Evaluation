@@ -29,7 +29,7 @@ const HeroContainer = styled.div`
 const LeftPanel = styled.div`
   background: ${props => props.score >= 50 ? '#064e3b' : '#1f2937'};
   color: #ffffff;
-  padding: 48px 120px 48px 60px;
+  padding: ${props => props.score >= 60 ? '48px 120px 48px 60px' : '48px 80px 48px 40px'};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -84,7 +84,7 @@ const GreetingSubtext = styled.div`
   font-weight: 400;
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.85);
-  max-width: 400px;
+  max-width: 550px;
 
   @media (max-width: 768px) {
     font-size: 0.875rem;
@@ -112,7 +112,7 @@ const ScoreSection = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 24px 0;
+  padding: ${props => props.hasOliveBranches ? '24px 0' : '12px 0'};
   position: relative;
 `;
 
@@ -227,7 +227,7 @@ const ChatBubbleWrapper = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 32px;
+  margin-bottom: 64px;
   width: 100%;
 
   @media (max-width: 768px) {
@@ -1438,10 +1438,10 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
         <GreetingSection>
           <HeroGreeting>Hey {userName},{'\n'}{getGreetingText(score)}</HeroGreeting>
           <GreetingSubtext>
-            This report helps you get from {score}% to 100% career readiness. Give it a read!
+            Your path to 100% career readiness starts here.
           </GreetingSubtext>
         </GreetingSection>
-        <ScoreSection>
+        <ScoreSection hasOliveBranches={score >= 60}>
           {score >= 60 && <OliveBranch src={oliveBranchLeft} alt="" position="left" />}
           {score >= 60 && <OliveBranch src={oliveBranchRight} alt="" position="right" />}
           <ScoreDisplay>{displayScore}%</ScoreDisplay>

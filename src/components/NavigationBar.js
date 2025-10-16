@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { DownloadSimple } from 'phosphor-react';
+import { DownloadSimple, Phone } from 'phosphor-react';
 import { ReactComponent as ScalerLogo } from '../assets/scaler-logo.svg';
 import { useProfile } from '../context/ProfileContext';
 
@@ -73,8 +73,7 @@ const CTAButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    font-size: 0.75rem;
-    padding: 8px 16px;
+    display: none;
   }
 `;
 
@@ -190,6 +189,76 @@ const ProgressBarFill = styled.div`
   width: ${props => props.width}%;
 `;
 
+const CSATBanner = styled.button`
+  background: #472472;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1001;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #5a2e8a;
+  }
+
+  &:active {
+    background: #3a1d5e;
+    transform: scale(0.995);
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px 12px;
+  }
+
+  @media print {
+    display: none;
+  }
+`;
+
+const CSATContent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1200px;
+  width: 100%;
+  justify-content: center;
+  pointer-events: none;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+`;
+
+const CSATText = styled.span`
+  font-size: 0.875rem;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+
+  @media (max-width: 768px) {
+    font-size: 0.8125rem;
+  }
+`;
+
+const CSATLink = styled.span`
+  font-size: 0.875rem;
+  color: #FFFFFF;
+  font-weight: 600;
+  text-decoration: underline;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+
+  @media (max-width: 768px) {
+    font-size: 0.8125rem;
+  }
+`;
+
 const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -209,8 +278,18 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
   };
 
   return (
-    <NavContainer>
-      <NavContent>
+    <>
+      {/* CSAT Banner - Only show on results page */}
+      {isResultsPage && (
+        <CSATBanner data-tally-open="m6XrjY" data-tally-layout="modal" data-tally-width="600" data-tally-emoji-text="👋" data-tally-emoji-animation="wave">
+          <CSATContent>
+            <CSATText>How was your profile evaluation experience?</CSATText>
+            <CSATLink>Share your feedback</CSATLink>
+          </CSATContent>
+        </CSATBanner>
+      )}
+      <NavContainer>
+        <NavContent>
         <Link to="/" style={{ textDecoration: 'none' }}>
           <Logo>
             <LogoGraphic aria-label="Scaler" />
@@ -251,7 +330,6 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
           </SegmentedControl>
         )}
         <NavActions>
-          {!isResultsPage && <CTAButton>Request Call Back</CTAButton>}
           {isResultsPage && evaluationResults && (
             <>
               <TextCTAButton onClick={handleReEvaluate}>Re-evaluate</TextCTAButton>
@@ -263,6 +341,7 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
               </IconButton>
             </>
           )}
+          <CTAButton onClick={() => window.open('/callback', '_blank')}>Request Call Back</CTAButton>
         </NavActions>
       </NavContent>
       {showProgress && (
@@ -270,7 +349,8 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
           <ProgressBarFill width={progress} />
         </ProgressBarContainer>
       )}
-    </NavContainer>
+      </NavContainer>
+    </>
   );
 };
 

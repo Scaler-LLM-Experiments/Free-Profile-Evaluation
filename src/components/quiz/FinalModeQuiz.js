@@ -631,6 +631,7 @@ const LastStepNavButton = styled.button`
   cursor: pointer;
   transition: all 0.2s ease;
   flex: ${props => props.variant === 'primary' ? '1' : 'none'};
+  width: ${props => props.variant === 'primary' ? 'auto' : '60px'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1087,9 +1088,15 @@ const FinalModeQuiz = ({ onProgressChange }) => {
               <BackButton onClick={handlePrevious} disabled={currentStep === 0}>
                 <CaretLeft size={20} weight="regular" />
               </BackButton>
-              <NextButton onClick={handleNext} disabled={!canProceed() || isLastStep}>
-                <CaretRight size={20} weight="regular" />
-              </NextButton>
+              {!isLastStep ? (
+                <NextButton onClick={handleNext} disabled={!canProceed()}>
+                  <CaretRight size={20} weight="regular" />
+                </NextButton>
+              ) : (
+                <LastStepNavButton variant="primary" onClick={handleNext} disabled={!canProceed()}>
+                  Evaluate my Profile
+                </LastStepNavButton>
+              )}
             </DesktopNavigation>
 
             <CarouselDotsContainer>

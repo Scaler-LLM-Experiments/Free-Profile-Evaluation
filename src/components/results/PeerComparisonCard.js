@@ -64,7 +64,7 @@ const PeerGroupText = styled.div`
 
 const DataSourceAttribution = styled.div`
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: #64748b;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -107,10 +107,18 @@ const CenterNumber = styled.div`
   font-weight: 700;
   color: #1e293b;
   line-height: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+`;
+
+const CenterSuperscript = styled.span`
+  font-size: 1rem;
+  font-weight: 600;
 `;
 
 const CenterText = styled.div`
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: #64748b;
   margin-top: 4px;
 `;
@@ -247,8 +255,11 @@ const PeerComparisonCard = ({ peerComparison }) => {
             </DonutSvg>
 
             <CenterLabel>
-              <CenterNumber>{currentPercentile}</CenterNumber>
-              <CenterText>th percentile</CenterText>
+              <CenterNumber>
+                {currentPercentile}
+                <CenterSuperscript>th</CenterSuperscript>
+              </CenterNumber>
+              <CenterText>percentile</CenterText>
             </CenterLabel>
           </DonutChartContainer>
 
