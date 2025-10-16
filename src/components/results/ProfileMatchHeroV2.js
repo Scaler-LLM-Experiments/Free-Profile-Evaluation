@@ -622,7 +622,7 @@ const CurrentRoleCard = styled.div`
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 `;
 
 const CurrentRoleInfo = styled.div`
@@ -645,7 +645,7 @@ const CurrentBadge = styled.div`
   border-radius: 0;
   font-size: 0.7rem;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   width: fit-content;
@@ -1632,7 +1632,9 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                           end={`role-${index}`}
                           color={index === 0 ? '#a7f3d0' : index === 1 ? '#bfdbfe' : '#e9d5ff'}
                           strokeWidth={6}
-                          curveness={0.8}
+                          curveness={0.6}
+                          startAnchor="right"
+                          endAnchor="left"
                           headSize={0}
                           path="smooth"
                           zIndex={1}
