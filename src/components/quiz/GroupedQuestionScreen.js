@@ -363,16 +363,16 @@ const GroupedQuestionScreen = ({
 }) => {
   const [chatText, setChatText] = useState(initialChatText);
 
-  const handleOptionSelect = (questionId, value, questionIndex) => {
+  const handleOptionSelect = (questionId, option, questionIndex) => {
     // Don't do anything if this option is already selected
-    if (responses[questionId] === value) {
+    if (responses[questionId] === option.value) {
       return;
     }
 
-    onResponse(questionId, value);
+    onResponse(questionId, option);
 
     // Check if all questions on this screen will be answered after this selection
-    const updatedResponses = { ...responses, [questionId]: value };
+    const updatedResponses = { ...responses, [questionId]: option.value };
     const allAnswered = questions.every((q) => updatedResponses[q.id] !== undefined && updatedResponses[q.id] !== null);
     const isLastQuestion = questionIndex === questions.length - 1;
     const isSingleQuestion = questions.length === 1;
@@ -380,8 +380,8 @@ const GroupedQuestionScreen = ({
     // Only update chat bubble if NOT (single question OR last question on screen)
     // This prevents jarring chat text changes right before auto-advance
     if (!isSingleQuestion && !isLastQuestion) {
-      if (chatResponseMap && chatResponseMap[questionId] && chatResponseMap[questionId][value]) {
-        const newChatText = chatResponseMap[questionId][value];
+      if (chatResponseMap && chatResponseMap[questionId] && chatResponseMap[questionId][option.value]) {
+        const newChatText = chatResponseMap[questionId][option.value];
         setChatText(newChatText);
 
         // Call the parent callback to update chat in left panel
@@ -435,7 +435,7 @@ const GroupedQuestionScreen = ({
                   <OptionPill
                     key={option.value}
                     selected={isSelected}
-                    onClick={() => handleOptionSelect(question.id, option.value, questionIndex)}
+                    onClick={() => handleOptionSelect(question.id, option, questionIndex)}
                   >
                     <OptionIconWrapper selected={isSelected}>
                       {option.icon || getOptionIcon(option.value)}

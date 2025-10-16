@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ArrowsClockwise, Desktop, Check } from 'phosphor-react';
-import scalerBot from '../../assets/scaler-bot.png';
+import chatBot from '../../assets/ChatBot.png';
 
 const slideInFromLeft = keyframes`
   from {
@@ -19,7 +19,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 600px;
-  gap: 32px;
+  gap: 24px;
 
   @media (max-width: 768px) {
     gap: 0;
@@ -29,9 +29,10 @@ const Container = styled.div`
 
 const ChatHeader = styled.div`
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 8px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  margin-bottom: 0;
 
   @media (max-width: 768px) {
     display: none;
@@ -39,8 +40,8 @@ const ChatHeader = styled.div`
 `;
 
 const BotAvatar = styled.div`
-  width: 56px;
-  height: 56px;
+  width: 100px;
+  height: 100px;
   border-radius: 0;
   background: transparent;
   display: flex;
@@ -103,7 +104,7 @@ const ChatText = styled.div`
 const QuestionSection = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 `;
 
 const QuestionLabel = styled.div`
@@ -204,7 +205,7 @@ const BackgroundSelectionSplit2 = ({ onSelect, onAutoAdvance, hideChat = false, 
     <Container>
       <ChatHeader>
         <BotAvatar>
-          <BotImage src={scalerBot} alt="Scaler Bot" />
+          <BotImage src={chatBot} alt="Scaler Bot" />
         </BotAvatar>
         <ChatBubble>
           <ChatText key={chatText}>{chatText}</ChatText>

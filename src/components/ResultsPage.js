@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useProfile } from '../context/ProfileContext';
 import { evaluateProfile } from '../utils/evaluationLogic';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
@@ -163,7 +164,50 @@ const PrimaryButton = styled.button`
   }
 `;
 
+const FloatingCTA = styled.button`
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #c71f69;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(199, 31, 105, 0.35);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  width: auto;
+  max-width: 90%;
+
+  &:hover {
+    background: #a01855;
+    box-shadow: 0 12px 32px rgba(199, 31, 105, 0.45);
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  &:active {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    bottom: 20px;
+    padding: 14px 24px;
+    font-size: 0.875rem;
+  }
+
+  @media print {
+    display: none;
+  }
+`;
+
 const ResultsPage = () => {
+  const navigate = useNavigate();
   const {
     quizResponses,
     goals,
@@ -287,8 +331,10 @@ const ResultsPage = () => {
     };
   }, [quizResponses, goals, background, setEvaluationResults, retryCount, evaluationResults]);
 
-  const handleRetry = () => {
-    setRetryCount((prev) => prev + 1);
+  const handleReEvaluate = () => {
+    // Clear evaluation results and navigate back to quiz start
+    setEvaluationResults(null);
+    navigate('/');
   };
 
   if (isLoading) {
@@ -322,7 +368,7 @@ const ResultsPage = () => {
           <ErrorContainer>
             <ErrorTitle>We ran into a problem</ErrorTitle>
             <ErrorMessage>{error}</ErrorMessage>
-            <PrimaryButton onClick={handleRetry}>Try Again</PrimaryButton>
+            <PrimaryButton onClick={handleReEvaluate}>Re-Evaluate</PrimaryButton>
           </ErrorContainer>
         </Container>
       </ResultsContainer>
@@ -353,9 +399,11 @@ const ResultsPage = () => {
           background={background}
           quizResponses={quizResponses}
           goals={goals}
-          layoutMode="vertical"
         />
       </Container>
+      <FloatingCTA onClick={() => window.open('/callback', '_blank')}>
+        Request Callback
+      </FloatingCTA>
     </ResultsContainer>
   );
 };

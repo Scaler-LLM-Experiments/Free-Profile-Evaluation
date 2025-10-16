@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { DownloadSimple } from 'phosphor-react';
 import { ReactComponent as ScalerLogo } from '../assets/scaler-logo.svg';
 import { useProfile } from '../context/ProfileContext';
 
@@ -25,6 +26,12 @@ const NavContent = styled.div`
   justify-content: space-between;
   height: 50px;
   gap: 24px;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    width: 100%;
+    padding: 0 12px;
+  }
 `;
 
 const Logo = styled.div`
@@ -83,6 +90,9 @@ const OutlineCTAButton = styled.button`
   transition: all 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background: #B30158;
@@ -90,8 +100,29 @@ const OutlineCTAButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    font-size: 0.75rem;
-    padding: 6px 14px;
+    display: none;
+  }
+`;
+
+const IconButton = styled.button`
+  background: transparent;
+  color: #B30158;
+  border: 2px solid #B30158;
+  padding: 8px;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: none;
+
+  &:hover {
+    background: #B30158;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
@@ -224,8 +255,12 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
           {isResultsPage && evaluationResults && (
             <>
               <TextCTAButton onClick={handleReEvaluate}>Re-evaluate</TextCTAButton>
+              {/* Desktop: Full button with text */}
               <OutlineCTAButton onClick={handleDownloadReport}>Download Report</OutlineCTAButton>
-              <CTAButton>Request Call Back</CTAButton>
+              {/* Mobile: Icon only */}
+              <IconButton onClick={handleDownloadReport}>
+                <DownloadSimple size={20} weight="bold" />
+              </IconButton>
             </>
           )}
         </NavActions>

@@ -170,8 +170,9 @@ const CheckIcon = styled.div`
 `;
 
 const QuizQuestion = ({ question, options, selectedValue, onSelect, questionNumber, totalQuestions }) => {
-  const handleOptionClick = (value) => {
-    onSelect(value);
+  const handleOptionClick = (option) => {
+    // Pass the entire option object (has both value and label)
+    onSelect(option);
   };
 
   return (
@@ -194,7 +195,7 @@ const QuizQuestion = ({ question, options, selectedValue, onSelect, questionNumb
           <Option
             key={option.value}
             selected={selectedValue === option.value}
-            onClick={() => handleOptionClick(option.value)}
+            onClick={() => handleOptionClick(option)}
           >
             <OptionIconWrapper selected={selectedValue === option.value}>
               {option.icon || option.label.charAt(0)}

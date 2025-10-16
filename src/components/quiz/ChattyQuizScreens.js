@@ -131,11 +131,12 @@ export const TECH_QUIZ_SCREENS = [
         id: 'targetRole',
         question: "What's your dream role?",
         options: [
-          { value: 'senior-faang', label: 'Senior Engineer (Product/FAANG)', icon: <Target size={24} weight="duotone" /> },
-          { value: 'backend-fullstack', label: 'Backend / Full-Stack Specialist', icon: <Stack size={24} weight="duotone" /> },
+          { value: 'senior-backend', label: 'Senior Backend Engineer', icon: <Database size={24} weight="duotone" /> },
+          { value: 'senior-fullstack', label: 'Senior Full-Stack Engineer', icon: <Stack size={24} weight="duotone" /> },
+          { value: 'backend-sde', label: 'Backend / API Engineer', icon: <Database size={24} weight="duotone" /> },
+          { value: 'fullstack-sde', label: 'Full-Stack Engineer', icon: <Stack size={24} weight="duotone" /> },
           { value: 'data-ml', label: 'Data / ML Engineer', icon: <ChartBar size={24} weight="duotone" /> },
-          { value: 'tech-lead', label: 'Tech Lead / Staff Engineer', icon: <ChartLineUp size={24} weight="duotone" /> },
-          { value: 'same-better', label: 'Same role, better company', icon: <Buildings size={24} weight="duotone" /> }
+          { value: 'tech-lead', label: 'Tech Lead / Staff Engineer', icon: <ChartLineUp size={24} weight="duotone" /> }
         ]
       },
       {
@@ -159,11 +160,12 @@ export const TECH_QUIZ_SCREENS = [
         'upskilling': "Great mindset! Strategic upskilling can lead to promotions and make you indispensable in your role."
       },
       targetRole: {
-        'senior-faang': "Aiming high! FAANG Senior+ roles are competitive but rewarding. Let's assess your readiness.",
-        'backend-fullstack': "Solid choice! These roles are always in demand with great career prospects and work-life balance.",
+        'senior-backend': "Great choice! Senior backend roles offer high impact, excellent compensation, and clear career growth.",
+        'senior-fullstack': "Versatile path! Senior full-stack engineers are highly sought after with strong compensation.",
+        'backend-sde': "Solid choice! Backend engineering is always in demand with great career prospects.",
+        'fullstack-sde': "Versatile! Full-stack roles offer broad learning and lots of opportunities across companies.",
         'data-ml': "Future-focused! Data & ML roles are exploding with cutting-edge problems and high compensation.",
-        'tech-lead': "Leadership track! Staff+ roles combine technical depth with impact - gateway to principal/architect.",
-        'same-better': "Smart! Same role at a better company often improves learning and comp more than internal promotion."
+        'tech-lead': "Leadership track! Staff+ roles combine technical depth with impact - gateway to principal/architect."
       },
       targetCompany: {
         'faang': "Top tier! FAANG offers unmatched comp and resume value. Hard to crack but worth the effort.",
@@ -202,6 +204,17 @@ export const TECH_QUIZ_SCREENS = [
           { value: 'learning', label: 'Self-learning only', icon: <BookOpen size={24} weight="duotone" /> },
           { value: 'not-yet', label: 'Not yet, will learn', icon: <Lightbulb size={24} weight="duotone" /> }
         ]
+      },
+      {
+        id: 'portfolio',
+        question: 'How active is your GitHub / GitLab profile?',
+        helperText: 'Projects show practical experience to recruiters',
+        options: [
+          { value: 'active-5+', label: 'Active (5+ public repos)', icon: <GitBranch size={24} weight="duotone" /> },
+          { value: 'limited-1-5', label: 'Limited (1-5 repos)', icon: <FolderOpen size={24} weight="duotone" /> },
+          { value: 'inactive', label: 'Inactive (old activity)', icon: <Clock size={24} weight="duotone" /> },
+          { value: 'none', label: 'No portfolio yet', icon: <Lightbulb size={24} weight="duotone" /> }
+        ]
       }
     ],
     chatResponseMap: {
@@ -216,6 +229,12 @@ export const TECH_QUIZ_SCREENS = [
         'once': "Good exposure! Real-world experience is valuable. Now let's deepen those system design skills.",
         'learning': "Smart! Self-learning shows initiative. Let's move from theory to practice with mock interviews.",
         'not-yet': "Perfect timing! System design is very learnable. I'll guide you based on your experience level."
+      },
+      portfolio: {
+        'active-5+': "Fantastic! An active portfolio is your best resume. Make sure READMEs are polished and projects are well-documented.",
+        'limited-1-5': "Good start! Having a few projects shows initiative. Focus on quality over quantity - add tests and documentation.",
+        'inactive': "Time to revive it! Upload recent work or practice projects. Recruiters check GitHub - make it count.",
+        'none': "No worries! Creating a portfolio is easier than you think. Start by uploading practice code and course projects."
       }
     }
   }
