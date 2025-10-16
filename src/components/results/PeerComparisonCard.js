@@ -192,7 +192,7 @@ const PeerComparisonCard = ({ peerComparison }) => {
           <PeerGroupText>{peerGroupDescription}</PeerGroupText>
         </PeerGroupWrapper>
         <DataSourceAttribution>
-          <LinkedinLogo size={12} weight="fill" />
+          <LinkedinLogo size={18} weight="fill" color="#0A66C2" />
           Data sourced from LinkedIn and Scaler's placement records
         </DataSourceAttribution>
 

@@ -1154,7 +1154,10 @@ const getToolLogoUrl = (toolName) => {
     'vault': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vault/vault-original.svg',
     'pagerduty': 'https://cdn.brandfetch.io/pagerduty.com/w/400/h/400',
     'sentry': 'https://cdn.brandfetch.io/sentry.io/w/400/h/400',
-    'postman': 'https://cdn.brandfetch.io/postman.com/w/400/h/400'
+    'postman': 'https://cdn.brandfetch.io/postman.com/w/400/h/400',
+    'replit': 'https://cdn.brandfetch.io/replit.com/w/400/h/400',
+    'dbeaver': 'https://cdn.brandfetch.io/dbeaver.io/w/400/h/400',
+    'tableplus': 'https://cdn.brandfetch.io/tableplus.com/w/400/h/400'
   };
 
   // First try exact match with first word
@@ -1811,11 +1814,11 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                   <BenchmarkLeftSection>
                     <BenchmarkItem>
                       <BenchmarkLabel>Your Experience</BenchmarkLabel>
-                      <BenchmarkValue>{experienceBenchmark.your_experience_years}</BenchmarkValue>
+                      <BenchmarkValue>{experienceBenchmark.your_experience_years} years</BenchmarkValue>
                     </BenchmarkItem>
                     <BenchmarkItem>
                       <BenchmarkLabel>Typical for Target Role</BenchmarkLabel>
-                      <BenchmarkValue>{experienceBenchmark.typical_for_target_role_years}</BenchmarkValue>
+                      <BenchmarkValue>{experienceBenchmark.typical_for_target_role_years} years</BenchmarkValue>
                     </BenchmarkItem>
                   </BenchmarkLeftSection>
                   {experienceBenchmark.gap_analysis && (
