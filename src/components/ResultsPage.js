@@ -266,6 +266,14 @@ const ResultsPage = () => {
     }
   }, [isLoading]);
 
+  // Redirect if no quiz data exists
+  useEffect(() => {
+    if (!quizResponses || !goals || !background) {
+      navigate('/', { replace: true });
+      return;
+    }
+  }, [quizResponses, goals, background, navigate]);
+
   useEffect(() => {
     // If evaluation results already exist (e.g., from localStorage), skip API call
     if (evaluationResults) {
