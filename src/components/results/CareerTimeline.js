@@ -233,9 +233,19 @@ const CareerTimeline = ({ recommendedRoles, targetRoleName }) => {
     );
   }
 
+  // Remove duplicate roles based on title
+  const uniqueRoles = recommendedRoles.reduce((acc, role) => {
+    const title = role.title || role.role;
+    if (!acc.find(r => (r.title || r.role) === title)) {
+      acc.push(role);
+    }
+    return acc;
+  }, []);
+
   // Find primary role (first one, typically the best match)
-  const primaryRole = recommendedRoles[0];
-  const otherRoles = recommendedRoles.slice(1, 3); // Show up to 2 additional roles
+  const primaryRole = uniqueRoles[0];
+  // Show up to 2 alternate roles (max 3 total cards: 1 target + 2 alternates)
+  const otherRoles = uniqueRoles.slice(1, 3);
 
   return (
     <TimelineContainer>

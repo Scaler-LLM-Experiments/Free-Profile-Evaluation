@@ -709,6 +709,30 @@ const FinalModeQuiz = ({ onProgressChange }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Ping backend to keep Render service warm (prevents cold starts)
+  useEffect(() => {
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+
+    // Initial ping when component mounts
+    const pingBackend = async () => {
+      try {
+        await fetch(`${apiUrl}/health`, { method: 'GET' });
+      } catch (error) {
+        // Silently fail - this is just to wake up the backend
+        console.log('Backend ping:', error.message);
+      }
+    };
+
+    // Ping immediately
+    pingBackend();
+
+    // Then ping every 5 minutes to keep service awake
+    const intervalId = setInterval(pingBackend, 5 * 60 * 1000); // 5 minutes
+
+    // Cleanup on unmount
+    return () => clearInterval(intervalId);
+  }, []);
+
   // Select the appropriate quiz screens based on background
   const getQuizScreens = () => {
     if (background === 'tech') {

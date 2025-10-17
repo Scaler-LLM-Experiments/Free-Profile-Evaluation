@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { DownloadSimple, Phone } from 'phosphor-react';
@@ -8,12 +8,19 @@ import { useProfile } from '../context/ProfileContext';
 const NavContainer = styled.nav`
   background: white;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  position: relative;
+  transition: transform 0.3s ease;
+  /* Match CSAT banner height: 41.5px */
+  transform: translateY(${props => props.showCSATBanner ? '0' : '-41.5px'});
+
+  @media (max-width: 768px) {
+    /* Mobile CSAT: 8px + 8px padding + column layout (~2 lines) = ~60px */
+    transform: translateY(${props => props.showCSATBanner ? '0' : '-60px'});
+  }
 
   @media print {
     display: none;
+    transform: none;
   }
 `;
 
@@ -189,6 +196,18 @@ const ProgressBarFill = styled.div`
   width: ${props => props.width}%;
 `;
 
+const StickyWrapper = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+  overflow: hidden;
+
+  @media print {
+    position: relative;
+    overflow: visible;
+  }
+`;
+
 const CSATBanner = styled.button`
   background: #472472;
   padding: 12px;
@@ -196,11 +215,11 @@ const CSATBanner = styled.button`
   align-items: center;
   justify-content: center;
   position: relative;
-  z-index: 1001;
   cursor: pointer;
   border: none;
   width: 100%;
-  transition: all 0.2s ease;
+  transition: transform 0.3s ease, background 0.2s ease;
+  transform: translateY(${props => props.isVisible ? '0' : '-100%'});
 
   &:hover {
     background: #5a2e8a;
@@ -208,7 +227,6 @@ const CSATBanner = styled.button`
 
   &:active {
     background: #3a1d5e;
-    transform: scale(0.995);
   }
 
   @media (max-width: 768px) {
@@ -264,9 +282,37 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
   const navigate = useNavigate();
   const { resetProfile, evaluationResults } = useProfile();
 
+  const [showCSATBanner, setShowCSATBanner] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
   const showProgress = location.pathname === '/quiz' || location.pathname === '/goals';
   const showModeToggle = location.pathname === '/quiz';
   const isResultsPage = location.pathname === '/results' || location.pathname === '/reports';
+
+  // Scroll direction detection for CSAT banner
+  useEffect(() => {
+    if (!isResultsPage) return;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < 10) {
+        // Always show at top of page
+        setShowCSATBanner(true);
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up - show banner
+        setShowCSATBanner(true);
+      } else if (currentScrollY > lastScrollY) {
+        // Scrolling down - hide banner
+        setShowCSATBanner(false);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY, isResultsPage]);
 
   const handleReEvaluate = () => {
     resetProfile();
@@ -278,17 +324,24 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
   };
 
   return (
-    <>
+    <StickyWrapper>
       {/* CSAT Banner - Only show on results page */}
       {isResultsPage && (
-        <CSATBanner data-tally-open="m6XrjY" data-tally-layout="modal" data-tally-width="600" data-tally-emoji-text="👋" data-tally-emoji-animation="wave">
+        <CSATBanner
+          isVisible={showCSATBanner}
+          data-tally-open="m6XrjY"
+          data-tally-layout="modal"
+          data-tally-width="600"
+          data-tally-emoji-text="👋"
+          data-tally-emoji-animation="wave"
+        >
           <CSATContent>
             <CSATText>How was your profile evaluation experience?</CSATText>
             <CSATLink>Share your feedback</CSATLink>
           </CSATContent>
         </CSATBanner>
       )}
-      <NavContainer>
+      <NavContainer showCSATBanner={isResultsPage && showCSATBanner}>
         <NavContent>
         <Link to="/" style={{ textDecoration: 'none' }}>
           <Logo>
@@ -350,7 +403,7 @@ const NavigationBar = ({ progress = 0, quizMode = 'grouped', onQuizModeChange })
         </ProgressBarContainer>
       )}
       </NavContainer>
-    </>
+    </StickyWrapper>
   );
 };
 
