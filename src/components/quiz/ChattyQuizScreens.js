@@ -7,7 +7,7 @@ import {
   Clock,
   Trophy,
   TrendUp,
-  CurrencyDollar,
+  CurrencyInr,
   Heart,
   ShieldCheck,
   Users,
@@ -58,6 +58,7 @@ export const TECH_QUIZ_SCREENS = [
         question: 'How many years have you been in the tech industry?',
         options: [
           { value: '0-2', label: '0-2 years', icon: <Clock size={24} weight="duotone" /> },
+          { value: '2-3', label: '2-3 years', icon: <Timer size={24} weight="duotone" /> },
           { value: '3-5', label: '3-5 years', icon: <Briefcase size={24} weight="duotone" /> },
           { value: '5-8', label: '5-8 years', icon: <TrendUp size={24} weight="duotone" /> },
           { value: '8+', label: '8+ years', icon: <Trophy size={24} weight="duotone" /> }
@@ -104,6 +105,7 @@ export const TECH_QUIZ_SCREENS = [
       },
       experience: {
         '0-2': "Early career is the best time to build strong foundations! The investments you make now will compound for years.",
+        '2-3': "Great timing! You're building solid experience. This is when intentional skill development pays off.",
         '3-5': "You're at a sweet spot! This is when career trajectories really diverge based on strategic choices.",
         '5-8': "Solid experience! Time to optimize and level up to senior roles or high-growth opportunities.",
         '8+': "Impressive journey! With 8+ years, you can target staff/principal roles or technical leadership positions."
@@ -122,7 +124,7 @@ export const TECH_QUIZ_SCREENS = [
         options: [
           { value: 'better-company', label: 'Move to a better company (same level)', icon: <Buildings size={24} weight="duotone" /> },
           { value: 'level-up', label: 'Level up (senior role / promotion)', icon: <TrendUp size={24} weight="duotone" /> },
-          { value: 'higher-comp', label: 'Higher compensation', icon: <CurrencyDollar size={24} weight="duotone" /> },
+          { value: 'higher-comp', label: 'Higher compensation', icon: <CurrencyInr size={24} weight="duotone" /> },
           { value: 'switch-domain', label: 'Switch to different tech domain', icon: <ArrowsClockwise size={24} weight="duotone" /> },
           { value: 'upskilling', label: 'Upskilling in current role', icon: <Rocket size={24} weight="duotone" /> }
         ]
@@ -264,6 +266,7 @@ export const NON_TECH_QUIZ_SCREENS = [
         options: [
           { value: '0', label: '0 years (Fresh grad)', icon: <GraduationCap size={24} weight="duotone" /> },
           { value: '0-2', label: '0-2 years', icon: <Clock size={24} weight="duotone" /> },
+          { value: '2-3', label: '2-3 years', icon: <Timer size={24} weight="duotone" /> },
           { value: '3-5', label: '3-5 years', icon: <Briefcase size={24} weight="duotone" /> },
           { value: '5+', label: '5+ years', icon: <Trophy size={24} weight="duotone" /> }
         ]
@@ -325,7 +328,7 @@ export const NON_TECH_QUIZ_SCREENS = [
         id: 'motivation',
         question: 'What is driving your move to tech?',
         options: [
-          { value: 'salary', label: 'Better salary & growth', icon: <CurrencyDollar size={24} weight="duotone" /> },
+          { value: 'salary', label: 'Better salary & growth', icon: <CurrencyInr size={24} weight="duotone" /> },
           { value: 'interest', label: 'Interest in technology', icon: <Heart size={24} weight="duotone" /> },
           { value: 'stability', label: 'Job stability & future-proofing', icon: <ShieldCheck size={24} weight="duotone" /> },
           { value: 'flexibility', label: 'Flexibility (remote work)', icon: <Rocket size={24} weight="duotone" /> },

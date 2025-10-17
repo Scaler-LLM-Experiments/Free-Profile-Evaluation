@@ -128,7 +128,7 @@ const LandingPage = () => {
     <LandingContainer>
       <Content>
         <Title>Free Profile Evaluation</Title>
-        <Subtitle>Assess Your Tech Career Readiness</Subtitle>
+        <Subtitle>Assess Your Tech Career Readiness in Just 2 Mins</Subtitle>
         <Description>
           Get a comprehensive evaluation of your profile for tech roles. 
           Discover your strengths, identify gaps, and receive personalized 

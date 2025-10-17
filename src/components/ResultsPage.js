@@ -284,7 +284,7 @@ const ResultsPage = () => {
     let isMounted = true;
     const controller = new AbortController();
     const startTime = Date.now();
-    const MINIMUM_LOADING_TIME = 5000; // 5 seconds minimum
+    const MINIMUM_LOADING_TIME = 10000; // 10 seconds minimum
 
     const fetchEvaluation = async () => {
       setIsLoading(true);

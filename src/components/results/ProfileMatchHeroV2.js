@@ -1814,11 +1814,17 @@ const ProfileMatchHeroV2 = ({ score, notes, badges, evaluationResults, backgroun
                   <BenchmarkLeftSection>
                     <BenchmarkItem>
                       <BenchmarkLabel>Your Experience</BenchmarkLabel>
-                      <BenchmarkValue>{experienceBenchmark.your_experience_years} years</BenchmarkValue>
+                      <BenchmarkValue>
+                        {experienceBenchmark.your_experience_years}
+                        {!experienceBenchmark.your_experience_years?.toLowerCase().includes('year') && ' years'}
+                      </BenchmarkValue>
                     </BenchmarkItem>
                     <BenchmarkItem>
                       <BenchmarkLabel>Typical for Target Role</BenchmarkLabel>
-                      <BenchmarkValue>{experienceBenchmark.typical_for_target_role_years} years</BenchmarkValue>
+                      <BenchmarkValue>
+                        {experienceBenchmark.typical_for_target_role_years}
+                        {!experienceBenchmark.typical_for_target_role_years?.toLowerCase().includes('year') && ' years'}
+                      </BenchmarkValue>
                     </BenchmarkItem>
                   </BenchmarkLeftSection>
                   {experienceBenchmark.gap_analysis && (
