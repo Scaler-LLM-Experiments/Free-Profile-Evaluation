@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ProfileProvider } from './context/ProfileContext';
 import NavigationBar from './components/NavigationBar';
@@ -9,6 +9,15 @@ function AppContent() {
   const [quizProgress, setQuizProgress] = useState(0);
   const [quizMode, setQuizMode] = useState('final'); // Default to 'final' mode
   const location = useLocation();
+
+  // Single ping on app load to wake up backend (UptimeRobot keeps it warm after that)
+  useEffect(() => {
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+
+    fetch(`${apiUrl}/health`, { method: 'GET' })
+      .then(() => console.log('Backend warming ping sent'))
+      .catch(() => {}); // Silent fail
+  }, []);
 
   // Hide navigation bar when in final mode on quiz page
   const shouldShowNav = !(quizMode === 'final' && location.pathname === '/quiz');
