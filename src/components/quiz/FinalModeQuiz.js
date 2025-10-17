@@ -272,11 +272,7 @@ const ProgressBarContainer = styled.div`
   height: 4px;
   background: #e2e8f0;
   z-index: 300;
-  display: none;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
+  display: block;
 `;
 
 const ProgressBarFill = styled.div`
