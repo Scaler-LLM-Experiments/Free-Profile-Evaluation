@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ProfileProvider } from './context/ProfileContext';
 import NavigationBar from './components/NavigationBar';
@@ -9,6 +9,28 @@ function AppContent() {
   const [quizProgress, setQuizProgress] = useState(0);
   const [quizMode, setQuizMode] = useState('final'); // Default to 'final' mode
   const location = useLocation();
+
+  // AGGRESSIVE backend warming - start immediately when app loads
+  useEffect(() => {
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+
+    const pingBackend = async () => {
+      try {
+        await fetch(`${apiUrl}/health`, { method: 'GET' });
+        console.log('Backend ping successful');
+      } catch (error) {
+        console.log('Backend ping failed (normal if backend is waking up):', error.message);
+      }
+    };
+
+    // Ping immediately on app load
+    pingBackend();
+
+    // Then ping every 2 minutes to keep backend warm
+    const intervalId = setInterval(pingBackend, 2 * 60 * 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   // Hide navigation bar when in final mode on quiz page
   const shouldShowNav = !(quizMode === 'final' && location.pathname === '/quiz');
