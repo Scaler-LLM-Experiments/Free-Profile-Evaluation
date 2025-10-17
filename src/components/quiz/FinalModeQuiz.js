@@ -934,7 +934,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
           {logoSection}
           <WelcomeContent>
             <WelcomeTitle>Free Profile Evaluation</WelcomeTitle>
-            <WelcomeSubtitle>Assess Your Tech Career Readiness</WelcomeSubtitle>
+            <WelcomeSubtitle>Assess Your Tech Career Readiness in just 2 mins</WelcomeSubtitle>
             <WelcomeDescription>
               Get a comprehensive evaluation of your profile for tech roles.
               Discover your strengths, identify gaps, and receive personalized
@@ -1013,7 +1013,7 @@ const FinalModeQuiz = ({ onProgressChange }) => {
           </LogoContainer>
           <WelcomeContent>
             <WelcomeTitle>Free Profile Evaluation</WelcomeTitle>
-            <WelcomeSubtitle>Assess Your Tech Career Readiness</WelcomeSubtitle>
+            <WelcomeSubtitle>Assess Your Tech Career Readiness in just 2 mins</WelcomeSubtitle>
             <WelcomeDescription>
               Get a comprehensive evaluation of your profile for tech roles.
               Discover your strengths, identify gaps, and receive personalized
